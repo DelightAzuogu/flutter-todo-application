@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Complete Reminder</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f6f6f6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .container {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #ffffff;
+        background-color: #007bff;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Completing Reminder...</h1>
+      <p>Please wait while we complete your reminder.</p>
+    </div>
+
+    <script>
+      // Get query parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const reminderId = urlParams.get("id");
+      const token = urlParams.get("token");
+
+      // Define the API endpoint and payload
+      const apiEndpoint = `https://dl0g3h9x-3000.euw.devtunnels.ms/reminder/complete/${reminderId}`;
+
+      // Function to complete the reminder
+      async function completeReminder() {
+        try {
+          const response = await fetch(apiEndpoint, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.ok) {
+            document.querySelector(".container").innerHTML =
+              "<h1>Reminder Completed</h1><p>Your reminder has been successfully completed.</p>";
+          } else {
+            document.querySelector(".container").innerHTML =
+              "<h1>Error</h1><p>There was an error completing your reminder. Please try again later.</p>";
+          }
+        } catch (error) {
+          document.querySelector(".container").innerHTML =
+            "<h1>Error</h1><p>There was an error completing your reminder. Please try again later.</p>";
+        }
+      }
+
+      // Call the function on page load
+      completeReminder();
+    </script>
+  </body>
+</html>

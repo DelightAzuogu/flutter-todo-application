@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:todo_application/api/api.dart';
 import 'package:todo_application/authentication/authentication.dart';
+import 'package:todo_application/shared/helpers/helpers.dart';
 import 'package:todo_application/storage/storage.dart';
 
 final authenticationInitializationProvider = FutureProvider<AuthenticationInitialization>((ref) async {
@@ -123,6 +124,7 @@ class AuthenticationController extends StateNotifier<AuthenticationState> {
         ),
       );
     } catch (e) {
+      showCustomToast(message: 'Invalid email or password. Failed to login');
       state = const AuthenticationState.unAuthenticated();
     }
   }
@@ -149,6 +151,7 @@ class AuthenticationController extends StateNotifier<AuthenticationState> {
         ),
       );
     } catch (e) {
+      showCustomToast(message: 'Failed to signup, please try again');
       state = const AuthenticationState.unAuthenticated();
     }
   }

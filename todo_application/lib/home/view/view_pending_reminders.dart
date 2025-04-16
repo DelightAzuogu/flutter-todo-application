@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_application/authentication/authentication.dart';
 import 'package:todo_application/home/home.dart';
+import 'package:todo_application/shared/helpers/helpers.dart';
 
 class ViewPendingReminders extends ConsumerWidget {
   const ViewPendingReminders({super.key});
@@ -13,6 +14,11 @@ class ViewPendingReminders extends ConsumerWidget {
     ref.listen(
       reminderControllerProvider,
       (prev, next) {
+        if (next.exception != null) {
+          showCustomToast(message: 'An Error has occurred');
+          return;
+        }
+
         if (next.isCompleted) {
           ref.invalidate(getUserReminderByDateProvider);
           ref.invalidate(getUserCompletedReminderByDateProvider);

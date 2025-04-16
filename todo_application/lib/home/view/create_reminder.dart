@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:reactive_date_time_picker/reactive_date_time_picker.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:todo_application/home/home.dart';
+import 'package:todo_application/shared/helpers/helpers.dart';
 
 class CreateReminder extends ConsumerStatefulWidget {
   const CreateReminder({super.key});
@@ -33,6 +34,10 @@ class _CreateReminderState extends ConsumerState<CreateReminder> {
     ref.listen(
       reminderControllerProvider,
       (prev, next) async {
+        if (next.exception != null) {
+          showCustomToast(message: 'An error occurred while creating your reminder');
+        }
+
         if (next.isCreated) {
           final labelId = ref.read(reminderControllerProvider.notifier).formGroup.control('labelId').value as String?;
           if (labelId != null) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:todo_application/home/home.dart';
+import 'package:todo_application/shared/helpers/helpers.dart';
 
 class ViewRemindersByLabel extends ConsumerStatefulWidget {
   const ViewRemindersByLabel({super.key});
@@ -14,6 +15,11 @@ class _ViewRemindersByLabelState extends ConsumerState<ViewRemindersByLabel> {
   @override
   Widget build(BuildContext context) {
     ref.listen(labelControllerProvider, (prev, next) {
+      if (next.exception != null) {
+        showCustomToast(message: 'An Error has occurred');
+        return;
+      }
+
       if (next.isDeleted) {
         ref.read(selectedLabelIdProvider.notifier).state = null;
         ref.invalidate(getAllLabelsProvider);

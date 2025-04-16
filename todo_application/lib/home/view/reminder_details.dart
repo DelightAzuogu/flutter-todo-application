@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:reactive_date_time_picker/reactive_date_time_picker.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:todo_application/home/home.dart';
+import 'package:todo_application/shared/helpers/helpers.dart';
 
 class ReminderDetails extends ConsumerStatefulWidget {
   const ReminderDetails({
@@ -23,6 +24,11 @@ class _ReminderDetailsState extends ConsumerState<ReminderDetails> {
     ref.invalidate(getAllLabelsProvider);
 
     ref.listen(reminderControllerProvider, (_, next) async {
+      if (next.exception != null) {
+        showCustomToast(message: 'An error has occurred');
+        return;
+      }
+
       if (next.isCompleted) {
         ref.invalidate(getUserReminderByDateProvider);
       } else if (next.isUpdated) {
@@ -31,6 +37,7 @@ class _ReminderDetailsState extends ConsumerState<ReminderDetails> {
       } else if (next.isDeleted) {
         ref.invalidate(getUserReminderByDateProvider);
       }
+
       context.pop();
     });
 

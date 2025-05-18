@@ -21,7 +21,6 @@ class _CreateReminderState extends ConsumerState<CreateReminder> {
     super.initState();
 
     final reminderNotifier = ref.read(reminderControllerProvider.notifier);
-    reminderNotifier.clearForm();
 
     formGroup = reminderNotifier.formGroup;
   }
@@ -43,7 +42,12 @@ class _CreateReminderState extends ConsumerState<CreateReminder> {
           if (labelId != null) {
             await ref.read(labelControllerProvider.notifier).assignLabelToReminder(labelId, next.reminderId!);
           }
+
           context.goNamed('home');
+
+          final reminderNotifier = ref.read(reminderControllerProvider.notifier);
+          reminderNotifier.clearForm();
+
           ref.invalidate(getUserReminderByDateProvider);
         }
       },

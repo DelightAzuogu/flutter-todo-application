@@ -1,7 +1,7 @@
 class ApiCallsConstants {
   ApiCallsConstants._();
 
-  static const String _baseUrl = 'https://dl0g3h9x-3000.euw.devtunnels.ms';
+  static const String _baseUrl = 'https://dlln3t6z-3000.euw.devtunnels.ms';
   static const String loginEndpoint = '$_baseUrl/auth/login';
   static const String getReminderByDateEndpoint = '$_baseUrl/reminder/user/all/date';
   static const String getCompletedRemindersEndpoint = '$_baseUrl/reminder/user/all/date/completed';

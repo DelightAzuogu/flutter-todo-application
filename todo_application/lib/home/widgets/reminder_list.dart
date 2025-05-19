@@ -38,7 +38,6 @@ class ReminderList extends ConsumerWidget {
             (reminder) => ReminderCard(
               reminder: reminder,
               currentTime: currentTime,
-              isCompleted: isCompleted,
             ),
           )
           .toList(),

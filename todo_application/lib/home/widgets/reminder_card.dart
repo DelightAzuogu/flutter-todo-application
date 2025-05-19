@@ -9,14 +9,12 @@ import 'package:todo_application/home/home.dart';
 class ReminderCard extends ConsumerWidget {
   final ReminderModel reminder;
   final DateTime currentTime;
-  final bool isCompleted;
   final bool showLabel;
 
   const ReminderCard({
     super.key,
     required this.reminder,
     required this.currentTime,
-    required this.isCompleted,
     this.showLabel = true,
   });
 
@@ -30,7 +28,7 @@ class ReminderCard extends ConsumerWidget {
       child: Card(
         elevation: 2,
         child: InkWell(
-          onTap: isCompleted
+          onTap: reminder.isCompleted
               ? null
               : () {
                   ref.read(selectedReminderProvider.notifier).state = reminder;
@@ -48,7 +46,7 @@ class ReminderCard extends ConsumerWidget {
                 ],
                 Row(
                   children: [
-                    if (!isCompleted)
+                    if (!reminder.isCompleted)
                       Padding(
                         padding: const EdgeInsets.only(right: 12),
                         child: ReminderCheckbox(reminder: reminder),
@@ -75,7 +73,7 @@ class ReminderCard extends ConsumerWidget {
         Text(
           reminder.title,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                decoration: isCompleted ? TextDecoration.lineThrough : null,
+                decoration: reminder.isCompleted ? TextDecoration.lineThrough : null,
               ),
         ),
         if (reminder.description != null) ...[
@@ -129,7 +127,7 @@ class ReminderCard extends ConsumerWidget {
             Column(
               children: [
                 PriorityBadge(priority: reminder.priority, color: priorityColor),
-                if (isOverDue && !isCompleted) ...[
+                if (isOverDue && !reminder.isCompleted) ...[
                   const Gap(8),
                   const OverdueBadge(),
                 ],

@@ -14,6 +14,7 @@ class ReminderModel extends Equatable {
   final DateTime? repeatEndDate;
   final List<String> repeatDays;
   final LabelModel? label;
+  final bool isCompleted;
 
   const ReminderModel({
     required this.id,
@@ -26,6 +27,7 @@ class ReminderModel extends Equatable {
     this.repeatEndDate,
     required this.repeatDays,
     this.label,
+    required this.isCompleted,
   });
 
   @override
@@ -41,6 +43,7 @@ class ReminderModel extends Equatable {
       repeatEndDate,
       repeatDays,
       label,
+      isCompleted,
     ];
   }
 
@@ -62,6 +65,7 @@ class ReminderModel extends Equatable {
       repeatEndDate: repeatEndDate,
       repeatDays: List<String>.from(map['repeatDays'] ?? []),
       label: map['label'] != null ? LabelModel.fromMap(map['label']) : null,
+      isCompleted: map['isCompleted'] ?? false,
     );
   }
 

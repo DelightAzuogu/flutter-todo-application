@@ -19,6 +19,8 @@ class ReminderDetails extends ConsumerStatefulWidget {
 }
 
 class _ReminderDetailsState extends ConsumerState<ReminderDetails> {
+  bool _isFormInitialized = false;
+
   @override
   Widget build(BuildContext context) {
     ref.invalidate(getAllLabelsProvider);
@@ -32,6 +34,9 @@ class _ReminderDetailsState extends ConsumerState<ReminderDetails> {
       if (next.isCompleted) {
         ref.invalidate(getUserReminderByDateProvider);
       } else if (next.isUpdated) {
+        final labelId = ref.read(reminderControllerProvider.notifier).formGroup.control('labelId').value as String?;
+        await ref.read(labelControllerProvider.notifier).assignLabelToReminder(labelId, widget.id);
+
         ref.invalidate(getReminderByIdProvider(widget.id));
         ref.invalidate(getUserReminderByDateProvider);
       } else if (next.isDeleted) {
@@ -74,15 +79,17 @@ class _ReminderDetailsState extends ConsumerState<ReminderDetails> {
           padding: const EdgeInsets.all(16.0),
           child: reminderAsyncValue.when(
             data: (reminder) {
-              // Set initial values
-              formGroup.control('title').value = reminder.title;
-              formGroup.control('description').value = reminder.description;
-              formGroup.control('expiryDate').value = reminder.expiryDate;
-              formGroup.control('priority').value = reminder.priority;
-              formGroup.control('repeatInterval').value = reminder.repeatInterval;
-              formGroup.control('repeatEndDate').value = reminder.repeatEndDate;
-              formGroup.control('repeatDays').value = reminder.repeatDays;
-              formGroup.control('labelId').value = reminder.label?.id;
+              if (!_isFormInitialized) {
+                formGroup.control('title').value = reminder.title;
+                formGroup.control('description').value = reminder.description;
+                formGroup.control('expiryDate').value = reminder.expiryDate;
+                formGroup.control('priority').value = reminder.priority;
+                formGroup.control('repeatInterval').value = reminder.repeatInterval;
+                formGroup.control('repeatEndDate').value = reminder.repeatEndDate;
+                formGroup.control('repeatDays').value = reminder.repeatDays;
+                formGroup.control('labelId').value = reminder.label?.id;
+                _isFormInitialized = true;
+              }
 
               return ReactiveForm(
                 formGroup: formGroup,
@@ -257,15 +264,6 @@ class _ReminderDetailsState extends ConsumerState<ReminderDetails> {
                                 return ElevatedButton(
                                   onPressed: formGroup.valid
                                       ? () async {
-                                          final labelId = ref
-                                              .read(reminderControllerProvider.notifier)
-                                              .formGroup
-                                              .control('labelId')
-                                              .value as String?;
-                                          await ref
-                                              .read(labelControllerProvider.notifier)
-                                              .assignLabelToReminder(labelId, widget.id);
-
                                           await ref.read(reminderControllerProvider.notifier).editReminder(reminder.id);
                                         }
                                       : null,
@@ -304,5 +302,12 @@ class _ReminderDetailsState extends ConsumerState<ReminderDetails> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // Reset the flag when the widget is disposed
+    _isFormInitialized = false;
+    super.dispose();
   }
 }

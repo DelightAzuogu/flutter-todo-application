@@ -21,8 +21,11 @@ class _CreateReminderState extends ConsumerState<CreateReminder> {
     super.initState();
 
     final reminderNotifier = ref.read(reminderControllerProvider.notifier);
-
     formGroup = reminderNotifier.formGroup;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      reminderNotifier.clearForm();
+    });
   }
 
   @override
@@ -135,14 +138,12 @@ class _CreateReminderState extends ConsumerState<CreateReminder> {
                                   value: null,
                                   child: Text('No Label'),
                                 ),
-                                ...labels
-                                    .map(
-                                      (label) => DropdownMenuItem(
-                                        value: label.id,
-                                        child: Text(label.name),
-                                      ),
-                                    )
-                                    .toList(),
+                                ...labels.map(
+                                  (label) => DropdownMenuItem(
+                                    value: label.id,
+                                    child: Text(label.name),
+                                  ),
+                                ),
                               ],
                               decoration: InputDecoration(
                                 labelText: 'Label',
